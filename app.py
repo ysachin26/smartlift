@@ -17,8 +17,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Generates a full multi-request testbench with sequential floor targets
 def build_testbench(floors, emergency_at=None):
     """
-    Build testbench Verilog for a queue of floor requests.
-    Each floor gets 80 time-units (8 clock cycles * 10ns each) to reach target.
+    Build testbench Verilog for a burst of floor button presses.
+    Requests are asserted quickly (one per clock) to mimic random user input.
+    The RTL then decides real service order based on current direction.
     emergency_at: optional time (ns) to assert emergency_stop
     """
     lines = []
@@ -43,12 +44,13 @@ def build_testbench(floors, emergency_at=None):
     lines.append('    $dumpvars(0, SmartLift_Tb);')
     lines.append("    #10 reset = 0;")
 
-    # Each floor request: set req_floor, wait enough cycles, monitor
-    t = 10
+    # Apply button presses quickly to populate pending requests bitmap.
     for floor in floors:
-        lines.append(f"    #5  req_floor = {floor}; // Request floor {floor}")
-        t += 5 + 80   # 80ns ~ 8 clock cycles per floor hop
-        lines.append(f"    #{80} ; // Travel time for floor {floor}")
+        lines.append(f"    #10 req_floor = {floor}; // Button press for floor {floor}")
+
+    # Give enough runtime for direction-aware servicing.
+    settle_time = max(200, 60 * len(floors) + 80)
+    lines.append(f"    #{settle_time} ; // Let controller serve all pending requests")
 
     if emergency_at:
         lines.append(f"    #{emergency_at} emergency_stop = 1; // Emergency stop")

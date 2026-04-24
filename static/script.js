@@ -5,31 +5,31 @@
  */
 
 // ─── State ───────────────────────────────────────────────────────────────────
-const NUM_FLOORS  = 8;        // floors 0–7
-let   queue       = [];       // user-selected floor queue
-let   emergency   = false;    // emergency stop flag
-let   simRunning  = false;    // prevent double-runs
-let   currentFloor = 0;       // visual current floor
-let   animTimer   = null;     // animation interval handle
-const FLOOR_H     = 44;       // px per floor row (matches CSS)
+const NUM_FLOORS = 8;        // floors 0–7
+let queue = [];       // user-selected floor queue
+let emergency = false;    // emergency stop flag
+let simRunning = false;    // prevent double-runs
+let currentFloor = 0;       // visual current floor
+let animTimer = null;     // animation interval handle
+const FLOOR_H = 44;       // px per floor row (matches CSS)
 
 // ─── DOM refs ────────────────────────────────────────────────────────────────
-const building     = document.getElementById('building');
+const building = document.getElementById('building');
 const floorDisplay = document.getElementById('floor-display');
-const dirText      = document.getElementById('dir-text');
-const dirArrow     = document.getElementById('dir-arrow');
+const dirText = document.getElementById('dir-text');
+const dirArrow = document.getElementById('dir-arrow');
 const dirIndicator = document.getElementById('dir-indicator');
-const doorStatus   = document.getElementById('door-status');
-const doorText     = document.getElementById('door-text');
-const doorIcon     = document.getElementById('door-icon');
-const logBox       = document.getElementById('log-box');
+const doorStatus = document.getElementById('door-status');
+const doorText = document.getElementById('door-text');
+const doorIcon = document.getElementById('door-icon');
+const logBox = document.getElementById('log-box');
 const queueDisplay = document.getElementById('queue-display');
-const runBtn       = document.getElementById('run-btn');
-const emergBtn     = document.getElementById('emerg-btn');
-const resumeBtn    = document.getElementById('resume-btn');
-const simOverlay   = document.getElementById('sim-overlay');
-const simSub       = document.getElementById('sim-sub');
-const tbCode       = document.getElementById('tb-code');
+const runBtn = document.getElementById('run-btn');
+const emergBtn = document.getElementById('emerg-btn');
+const resumeBtn = document.getElementById('resume-btn');
+const simOverlay = document.getElementById('sim-overlay');
+const simSub = document.getElementById('sim-sub');
+const tbCode = document.getElementById('tb-code');
 
 // ─── Build building floors ────────────────────────────────────────────────────
 function buildUI() {
@@ -71,7 +71,7 @@ function buildUI() {
 }
 
 function floorLabel(f) {
-  const labels = ['GND','1st','2nd','3rd','4th','5th','6th','7th'];
+  const labels = ['GND', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
   return labels[f] || '';
 }
 
@@ -119,6 +119,20 @@ function renderQueue() {
   queueDisplay.innerHTML = queue.map(f =>
     `<span class="queue-chip" id="chip-${f}">${f}</span>`
   ).join('');
+}
+
+function planServiceOrder(requestedFloors, startFloor, startDir = 'UP') {
+  const uniq = [...new Set(requestedFloors)].sort((a, b) => a - b);
+  const above = uniq.filter(f => f >= startFloor);
+  const below = uniq.filter(f => f < startFloor).sort((a, b) => b - a);
+
+  if (startDir === 'DOWN') {
+    const downFirst = uniq.filter(f => f <= startFloor).sort((a, b) => b - a);
+    const upLater = uniq.filter(f => f > startFloor).sort((a, b) => a - b);
+    return [...downFirst, ...upLater];
+  }
+
+  return [...above, ...below];
 }
 
 // ─── Simulation ───────────────────────────────────────────────────────────────
@@ -197,7 +211,7 @@ async function playTrace(trace, floors) {
       break;
     }
 
-    const f     = snap.current_floor;
+    const f = snap.current_floor;
     const state = snap.state;
 
     // Update cabin position
@@ -235,10 +249,12 @@ async function playTrace(trace, floors) {
 async function animateFromQueue(floors) {
   setFSM('IDLE');
 
-  for (let i = 0; i < floors.length; i++) {
+  const targets = planServiceOrder(floors, currentFloor, 'UP');
+
+  for (let i = 0; i < targets.length; i++) {
     if (emergency) { setFSM('EMERG'); break; }
 
-    const target = floors[i];
+    const target = targets[i];
     const chip = document.getElementById(`chip-${target}`);
     if (chip) chip.classList.add('active');
     addLog(`► Targeting floor ${target}`, 'log-sys');
@@ -263,8 +279,10 @@ async function animateFromQueue(floors) {
         addLog(`▼ Moving down → Floor ${currentFloor}`, 'log-down');
       }
 
-      updateSignals({ current_floor: currentFloor, idle: 0, door: 0,
-                      up: dir > 0 ? 1 : 0, down: dir < 0 ? 1 : 0 });
+      updateSignals({
+        current_floor: currentFloor, idle: 0, door: 0,
+        up: dir > 0 ? 1 : 0, down: dir < 0 ? 1 : 0
+      });
       await sleep(420);
     }
 
@@ -304,7 +322,7 @@ function moveCabinTo(floor) {
 
 function setDirection(dir) {
   dirIndicator.className = 'dir-indicator';
-  if (dir === 'UP')   { dirIndicator.classList.add('dir-up');   dirArrow.textContent = '▲'; dirText.textContent = 'MOVING UP'; }
+  if (dir === 'UP') { dirIndicator.classList.add('dir-up'); dirArrow.textContent = '▲'; dirText.textContent = 'MOVING UP'; }
   if (dir === 'DOWN') { dirIndicator.classList.add('dir-down'); dirArrow.textContent = '▼'; dirText.textContent = 'MOVING DOWN'; }
   if (dir === 'IDLE') { dirIndicator.classList.add('dir-idle'); dirArrow.textContent = '●'; dirText.textContent = 'IDLE'; }
 }
@@ -338,21 +356,21 @@ function setFSM(state) {
 function updateSignals(snap) {
   const toBin = (v, bits) => (v >>> 0).toString(2).padStart(bits, '0');
   document.getElementById('sig-floor').textContent = toBin(snap.current_floor, 3);
-  document.getElementById('sig-idle').textContent  = toBin(snap.idle || 0, 2);
-  document.getElementById('sig-up').textContent    = toBin(snap.up   || 0, 2);
-  document.getElementById('sig-down').textContent  = toBin(snap.down || 0, 2);
-  document.getElementById('sig-door').textContent  = toBin(snap.door || 0, 2);
+  document.getElementById('sig-idle').textContent = toBin(snap.idle || 0, 2);
+  document.getElementById('sig-up').textContent = toBin(snap.up || 0, 2);
+  document.getElementById('sig-down').textContent = toBin(snap.down || 0, 2);
+  document.getElementById('sig-door').textContent = toBin(snap.door || 0, 2);
   document.getElementById('sig-emerg').textContent = emergency ? '1' : '0';
 }
 
 function logState(floor, state) {
   const map = {
-    'MOVING_UP':   ['log-up',   `▲ Moving UP   — floor ${floor}`],
+    'MOVING_UP': ['log-up', `▲ Moving UP   — floor ${floor}`],
     'MOVING_DOWN': ['log-down', `▼ Moving DOWN — floor ${floor}`],
-    'DOOR_OPEN':   ['log-door', `■ DOOR OPEN   — floor ${floor}`],
-    'IDLE':        ['log-done', `● IDLE        — floor ${floor}`],
-    'RESET':       ['log-sys',  `↺ RESET`],
-    'EMERG':       ['log-emerg','⚠ EMERGENCY STOP'],
+    'DOOR_OPEN': ['log-door', `■ DOOR OPEN   — floor ${floor}`],
+    'IDLE': ['log-done', `● IDLE        — floor ${floor}`],
+    'RESET': ['log-sys', `↺ RESET`],
+    'EMERG': ['log-emerg', '⚠ EMERGENCY STOP'],
   };
   const [cls, msg] = map[state] || ['log-sys', state];
   addLog(msg, cls);

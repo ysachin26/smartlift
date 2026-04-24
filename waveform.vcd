@@ -1,5 +1,5 @@
 $date
-	Fri Apr 24 09:18:19 2026
+	Fri Apr 24 09:31:10 2026
 $end
 $version
 	Icarus Verilog
@@ -34,12 +34,21 @@ $var parameter 3 3 S_RESET $end
 $var reg 2 4 Down [1:0] $end
 $var reg 2 5 Up [1:0] $end
 $var reg 3 6 current_floor [2:0] $end
-$var reg 2 7 door [1:0] $end
-$var reg 2 8 idle [1:0] $end
-$var reg 3 9 max_request [2:0] $end
-$var reg 3 : min_request [2:0] $end
-$var reg 8 ; requests [7:0] $end
-$var reg 3 < state [2:0] $end
+$var reg 1 7 direction_up $end
+$var reg 2 8 door [1:0] $end
+$var reg 2 9 idle [1:0] $end
+$var reg 3 : last_req_floor [2:0] $end
+$var reg 3 ; max_request [2:0] $end
+$var reg 3 < min_request [2:0] $end
+$var reg 8 = requests [7:0] $end
+$var reg 1 > sampled_req $end
+$var reg 3 ? state [2:0] $end
+$scope function has_above $end
+$var reg 3 @ f [2:0] $end
+$upscope $end
+$scope function has_below $end
+$var reg 3 A f [2:0] $end
+$upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
@@ -54,12 +63,17 @@ b100 .
 $end
 #0
 $dumpvars
-b0 <
+bx A
+bx @
+b0 ?
+0>
+b0 =
+b111 <
 b0 ;
-b111 :
-b0 9
-b1 8
-b0 7
+b0 :
+b1 9
+b0 8
+17
 b0 6
 b1 5
 b0 4
@@ -83,142 +97,173 @@ $end
 0)
 0,
 #15000
-b1 <
+b1 ?
+b0 "
+b0 <
+1>
 1)
-b11 +
-b11 -
 #20000
 0)
+b1 +
+b1 -
 #25000
-b0 $
-b0 8
-b10 <
+b0 '
+b0 5
+b1 :
+b10 !
+b10 =
+b0 A
+b0 @
 1)
 #30000
 0)
+b110 +
+b110 -
 #35000
-b1 &
-b1 6
+b1 '
+b1 5
+b0 $
+b0 9
+b10 ?
+b1 "
+b1 <
+b1 #
+b1 ;
+b110 :
+b1000010 !
+b1000010 =
 1)
 #40000
 0)
 #45000
-b10 &
-b10 6
+b1 $
+b1 9
+b0 '
+b0 5
+b1 %
+b1 8
+b100 ?
+b1000000 !
+b1000000 =
+b1 &
+b1 6
+b110 #
+b110 ;
 1)
 #50000
 0)
 #55000
-b11 &
-b11 6
+b1 ?
+b0 %
+b0 8
+b110 "
+b110 <
 1)
 #60000
 0)
 #65000
-b1 $
-b1 8
-b0 '
-b0 5
-b1 %
-b1 7
-b100 <
+b1 '
+b1 5
+b0 $
+b0 9
+b10 ?
+b1 @
 1)
 #70000
 0)
 #75000
-b1 <
-b0 %
-b0 7
+b10 &
+b10 6
 1)
 #80000
 0)
 #85000
-b1 %
-b1 7
-b100 <
+b11 &
+b11 6
 1)
 #90000
 0)
 #95000
-b1 <
-b0 %
-b0 7
+b100 &
+b100 6
 1)
 #100000
 0)
-b1 +
-b1 -
 #105000
-b1 (
-b1 4
-b0 $
-b0 8
-b11 <
+b101 &
+b101 6
 1)
 #110000
 0)
 #115000
-b10 &
-b10 6
+b1 $
+b1 9
+b0 '
+b0 5
+b1 %
+b1 8
+b100 ?
+b0 !
+b0 =
+b110 &
+b110 6
 1)
 #120000
 0)
 #125000
-b1 &
-b1 6
+b1 ?
+b0 %
+b0 8
 1)
 #130000
 0)
 #135000
-b1 $
-b1 8
-b0 (
-b0 4
-b1 %
-b1 7
-b100 <
+b110 A
+b110 @
 1)
 #140000
 0)
 #145000
-b1 <
-b0 %
-b0 7
 1)
 #150000
 0)
 #155000
-b1 %
-b1 7
-b100 <
 1)
 #160000
 0)
 #165000
-b1 <
-b0 %
-b0 7
 1)
 #170000
 0)
 #175000
-b1 %
-b1 7
-b100 <
 1)
 #180000
 0)
 #185000
-b1 <
-b0 %
-b0 7
 1)
 #190000
 0)
 #195000
-b1 %
-b1 7
-b100 <
 1)
 #200000
+0)
+#205000
+1)
+#210000
+0)
+#215000
+1)
+#220000
+0)
+#225000
+1)
+#230000
+0)
+#235000
+1)
+#240000
+0)
+#245000
+1)
+#250000
 0)
