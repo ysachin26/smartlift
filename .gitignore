@@ -1,0 +1,30 @@
+# Python virtual environment
+.venv/
+venv/
+
+# Python cache/bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask/debug artifacts
+instance/
+.webassets-cache/
+
+# Verilog/Icarus build artifacts
+sim
+sim_check
+*.vvp
+waveform.vcd
+SmartLift_Tb.v
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# VS Code/editor settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

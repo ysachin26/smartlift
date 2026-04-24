@@ -7,7 +7,7 @@ module SmartLift_Tb();
   wire [7:0] requests;
   wire [2:0] max_request, min_request;
 
-  SmartLift dut(
+  SmartLift #(.START_FLOOR(3'd5)) dut(
     clk, reset, req_floor,
     idle, door, Up, Down,
     current_floor, requests,
@@ -18,10 +18,10 @@ module SmartLift_Tb();
     $dumpfile("waveform.vcd");
     $dumpvars(0, SmartLift_Tb);
     #10 reset = 0;
-    #10 req_floor = 1; // Button press for floor 1
-    #10 req_floor = 5; // Button press for floor 5
     #10 req_floor = 4; // Button press for floor 4
     #10 req_floor = 2; // Button press for floor 2
+    #10 req_floor = 0; // Button press for floor 0
+    #10 req_floor = 6; // Button press for floor 6
     #320 ; // Let controller serve all pending requests
     #20 $finish;
   end

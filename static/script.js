@@ -174,7 +174,11 @@ async function runSimulation() {
     const resp = await fetch('/simulate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ floors: [...queue], emergency })
+      body: JSON.stringify({
+        floors: [...queue],
+        emergency,
+        start_floor: currentFloor
+      })
     });
 
     simSub.textContent = 'Parsing waveform…';
@@ -270,6 +274,8 @@ async function playTrace(trace, floors) {
   }
 
   addLog('━━━ Simulation Complete ━━━', 'log-done');
+  queue = [];
+  renderQueue();
   closeDoor();
   setDirection('IDLE');
   setFSM('IDLE');
@@ -335,6 +341,8 @@ async function animateFromQueue(floors) {
   }
 
   addLog('━━━ All floors served ━━━', 'log-done');
+  queue = [];
+  renderQueue();
   setDirection('IDLE');
 }
 

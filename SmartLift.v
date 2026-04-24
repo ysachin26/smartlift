@@ -4,7 +4,9 @@
 // States: RESET → IDLE → MOVING_UP / MOVING_DOWN → DOOR_OPEN → IDLE
 // Emergency stop overrides all motion
 
-module SmartLift(
+module SmartLift #(
+    parameter [2:0] START_FLOOR = 3'd0
+)(
     input             clk,
     input             reset,
     input      [2:0]  req_floor,
@@ -74,14 +76,14 @@ endfunction
 always @(posedge clk or posedge reset) begin
     if (reset) begin
         state         <= S_RESET;
-        current_floor <= 3'd0;
+        current_floor <= START_FLOOR;
         idle          <= 2'd1;
         door          <= 2'd0;
         Up            <= 2'd1;
         Down          <= 2'd0;
         requests      <= 8'd0;
-        max_request   <= 3'd0;
-        min_request   <= 3'd7;
+        max_request   <= START_FLOOR;
+        min_request   <= START_FLOOR;
         direction_up  <= 1'b1;
         sampled_req   <= 1'b0;
         last_req_floor<= 3'd0;

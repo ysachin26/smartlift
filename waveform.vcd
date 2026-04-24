@@ -1,5 +1,5 @@
 $date
-	Fri Apr 24 09:44:07 2026
+	Fri Apr 24 09:48:05 2026
 $end
 $version
 	Icarus Verilog
@@ -27,64 +27,66 @@ $var wire 3 - req_floor [2:0] $end
 $var wire 1 , reset $end
 $var parameter 3 . DOOR_TICKS $end
 $var parameter 3 / MOVE_TICKS $end
-$var parameter 3 0 S_DOOR $end
-$var parameter 3 1 S_EMERG $end
-$var parameter 3 2 S_IDLE $end
-$var parameter 3 3 S_MOVE_DN $end
-$var parameter 3 4 S_MOVE_UP $end
-$var parameter 3 5 S_RESET $end
-$var reg 2 6 Down [1:0] $end
-$var reg 2 7 Up [1:0] $end
-$var reg 3 8 current_floor [2:0] $end
-$var reg 1 9 direction_up $end
-$var reg 2 : door [1:0] $end
-$var reg 3 ; door_wait [2:0] $end
-$var reg 2 < idle [1:0] $end
-$var reg 3 = last_req_floor [2:0] $end
-$var reg 3 > max_request [2:0] $end
-$var reg 3 ? min_request [2:0] $end
-$var reg 3 @ move_wait [2:0] $end
-$var reg 8 A requests [7:0] $end
-$var reg 1 B sampled_req $end
-$var reg 3 C state [2:0] $end
+$var parameter 3 0 START_FLOOR $end
+$var parameter 3 1 S_DOOR $end
+$var parameter 3 2 S_EMERG $end
+$var parameter 3 3 S_IDLE $end
+$var parameter 3 4 S_MOVE_DN $end
+$var parameter 3 5 S_MOVE_UP $end
+$var parameter 3 6 S_RESET $end
+$var reg 2 7 Down [1:0] $end
+$var reg 2 8 Up [1:0] $end
+$var reg 3 9 current_floor [2:0] $end
+$var reg 1 : direction_up $end
+$var reg 2 ; door [1:0] $end
+$var reg 3 < door_wait [2:0] $end
+$var reg 2 = idle [1:0] $end
+$var reg 3 > last_req_floor [2:0] $end
+$var reg 3 ? max_request [2:0] $end
+$var reg 3 @ min_request [2:0] $end
+$var reg 3 A move_wait [2:0] $end
+$var reg 8 B requests [7:0] $end
+$var reg 1 C sampled_req $end
+$var reg 3 D state [2:0] $end
 $scope function has_above $end
-$var reg 3 D f [2:0] $end
+$var reg 3 E f [2:0] $end
 $upscope $end
 $scope function has_below $end
-$var reg 3 E f [2:0] $end
+$var reg 3 F f [2:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b0 5
-b10 4
-b11 3
-b1 2
-b101 1
-b100 0
+b0 6
+b10 5
+b11 4
+b1 3
+b101 2
+b100 1
+b101 0
 b10 /
 b11 .
 $end
 #0
 $dumpvars
+bx F
 bx E
-bx D
-b0 C
-0B
+b0 D
+0C
+b0 B
 b0 A
-b0 @
-b111 ?
+b101 @
+b101 ?
 b0 >
-b0 =
-b1 <
+b1 =
+b0 <
 b0 ;
-b0 :
-19
-b0 8
-b1 7
-b0 6
+1:
+b101 9
+b1 8
+b0 7
 b0 -
 1,
 b0 +
@@ -92,11 +94,11 @@ b0 +
 0)
 b0 (
 b1 '
-b0 &
+b101 &
 b0 %
 b1 $
-b0 #
-b111 "
+b101 #
+b101 "
 b0 !
 $end
 #5000
@@ -105,297 +107,315 @@ $end
 0)
 0,
 #15000
-b1 C
-b0 "
-b0 ?
-1B
+b1 D
+1C
 1)
 #20000
 0)
-b1 +
-b1 -
+b100 +
+b100 -
 #25000
 b0 '
-b0 7
-b1 =
-b10 !
-b10 A
-b0 E
-b0 D
+b0 8
+b100 >
+b10000 !
+b10000 B
+b101 F
+b101 E
 1)
 #30000
 0)
-b101 +
-b101 -
+b10 +
+b10 -
 #35000
-b1 '
+b1 (
 b1 7
 b0 $
-b0 <
-b10 C
-b1 "
-b1 ?
-b1 #
-b1 >
-b101 =
-b100010 !
-b100010 A
+b0 =
+b11 D
+0:
+b100 "
+b100 @
+b100 #
+b100 ?
+b10 >
+b10100 !
+b10100 B
 1)
 #40000
 0)
-b100 +
-b100 -
+b0 +
+b0 -
 #45000
-b1 @
-b101 #
-b101 >
-b100 =
-b110010 !
-b110010 A
+b1 A
+b10 "
+b10 @
+b0 >
+b10101 !
+b10101 B
 1)
 #50000
 0)
-b10 +
-b10 -
+b110 +
+b110 -
 #55000
 b1 $
-b1 <
-b0 '
+b1 =
+b0 (
 b0 7
 b1 %
-b1 :
-b100 C
-b1 &
-b1 8
+b1 ;
+b100 D
+b100 &
+b100 9
+b0 A
+b0 "
 b0 @
-b10 =
-b110100 !
-b110100 A
+b110 >
+b1000101 !
+b1000101 B
 1)
 #60000
 0)
 #65000
-b1 ;
-b10 "
-b10 ?
+b1 <
+b110 #
+b110 ?
 1)
 #70000
 0)
 #75000
-b10 ;
+b10 <
 1)
 #80000
 0)
 #85000
-b1 C
+b1 D
 b0 %
-b0 :
 b0 ;
+b0 <
 1)
 #90000
 0)
 #95000
-b1 '
+b1 (
 b1 7
 b0 $
-b0 <
-b10 C
-b1 D
+b0 =
+b11 D
+b100 F
 1)
 #100000
 0)
 #105000
-b1 @
+b1 A
 1)
 #110000
 0)
 #115000
-b1 $
-b1 <
-b0 '
-b0 7
-b1 %
-b1 :
-b100 C
-b110000 !
-b110000 A
-b10 &
-b10 8
-b0 @
+b11 &
+b11 9
+b0 A
 1)
 #120000
 0)
 #125000
-b1 ;
-b100 "
-b100 ?
+b1 A
 1)
 #130000
 0)
 #135000
-b10 ;
+b1 $
+b1 =
+b0 (
+b0 7
+b1 %
+b1 ;
+b100 D
+b1000001 !
+b1000001 B
+b10 &
+b10 9
+b0 A
 1)
 #140000
 0)
 #145000
-b1 C
-b0 %
-b0 :
-b0 ;
+b1 <
 1)
 #150000
 0)
 #155000
-b1 '
-b1 7
-b0 $
-b0 <
-b10 C
-b10 D
+b10 <
 1)
 #160000
 0)
 #165000
-b1 @
+b1 D
+b0 %
+b0 ;
+b0 <
 1)
 #170000
 0)
 #175000
-b11 &
-b11 8
-b0 @
+b1 (
+b1 7
+b0 $
+b0 =
+b11 D
+b10 F
 1)
 #180000
 0)
 #185000
-b1 @
+b1 A
 1)
 #190000
 0)
 #195000
-b1 $
-b1 <
-b0 '
-b0 7
-b1 %
-b1 :
-b100 C
-b100000 !
-b100000 A
-b100 &
-b100 8
-b0 @
+b1 &
+b1 9
+b0 A
 1)
 #200000
 0)
 #205000
-b1 ;
-b101 "
-b101 ?
+b1 A
 1)
 #210000
 0)
 #215000
-b10 ;
+b1 $
+b1 =
+b0 (
+b0 7
+b1 %
+b1 ;
+b100 D
+b1000000 !
+b1000000 B
+b0 &
+b0 9
+b0 A
 1)
 #220000
 0)
 #225000
-b1 C
-b0 %
-b0 :
-b0 ;
+b1 <
+b110 "
+b110 @
 1)
 #230000
 0)
 #235000
-b1 '
-b1 7
-b0 $
-b0 <
-b10 C
-b100 D
+b10 <
 1)
 #240000
 0)
 #245000
-b1 @
+b1 D
+b0 %
+b0 ;
+b0 <
 1)
 #250000
 0)
 #255000
-b1 $
-b1 <
-b0 '
-b0 7
-b1 %
-b1 :
-b100 C
-b0 !
-b0 A
-b101 &
-b101 8
-b0 @
+b1 '
+b1 8
+b0 $
+b0 =
+b10 D
+1:
+b0 E
+b0 F
 1)
 #260000
 0)
 #265000
-b1 ;
+b1 A
 1)
 #270000
 0)
 #275000
-b10 ;
+b1 &
+b1 9
+b0 A
 1)
 #280000
 0)
 #285000
-b1 C
-b0 %
-b0 :
-b0 ;
+b1 A
 1)
 #290000
 0)
 #295000
-b101 E
-b101 D
+b10 &
+b10 9
+b0 A
 1)
 #300000
 0)
 #305000
+b1 A
 1)
 #310000
 0)
 #315000
+b11 &
+b11 9
+b0 A
 1)
 #320000
 0)
 #325000
+b1 A
 1)
 #330000
 0)
 #335000
+b100 &
+b100 9
+b0 A
 1)
 #340000
 0)
 #345000
+b1 A
 1)
 #350000
 0)
 #355000
+b101 &
+b101 9
+b0 A
 1)
 #360000
 0)
 #365000
+b1 A
 1)
 #370000
 0)
 #375000
+b1 $
+b1 =
+b0 '
+b0 8
+b1 %
+b1 ;
+b100 D
+b0 !
+b0 B
+b110 &
+b110 9
+b0 A
 1)
 #380000
 0)
 #385000
+b1 <
 1)
 #390000
 0)

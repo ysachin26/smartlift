@@ -15,13 +15,16 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # ─── Verilog testbench template ──────────────────────────────────────────────
 # Generates a full multi-request testbench with sequential floor targets
-def build_testbench(floors, emergency_at=None):
+def build_testbench(floors, start_floor=0, emergency_at=None):
     """
     Build testbench Verilog for a burst of floor button presses.
     Requests are asserted quickly (one per clock) to mimic random user input.
     The RTL then decides real service order based on current direction.
+    start_floor: initial floor for controller reset state (0-7)
     emergency_at: optional time (ns) to assert emergency_stop
     """
+    start_floor = max(0, min(7, int(start_floor)))
+
     lines = []
     lines.append("`timescale 1ns/1ps")
     lines.append("module SmartLift_Tb();")
@@ -32,7 +35,7 @@ def build_testbench(floors, emergency_at=None):
     lines.append("  wire [7:0] requests;")
     lines.append("  wire [2:0] max_request, min_request;")
     lines.append("")
-    lines.append("  SmartLift dut(")
+    lines.append(f"  SmartLift #(.START_FLOOR(3'd{start_floor})) dut(")
     lines.append("    clk, reset, req_floor,")
     lines.append("    idle, door, Up, Down,")
     lines.append("    current_floor, requests,")
@@ -139,9 +142,11 @@ def simulate():
     data = request.get_json()
     floors = data.get('floors', [0])
     emergency = data.get('emergency', False)
+    start_floor = int(data.get('start_floor', 0))
 
     # Validate floors
     floors = [int(f) for f in floors if 0 <= int(f) <= 7]
+    start_floor = max(0, min(7, start_floor))
     if not floors:
         return jsonify({'error': 'No valid floors provided'}), 400
 
@@ -151,7 +156,11 @@ def simulate():
     vcd_path  = os.path.join(BASE_DIR, 'waveform.vcd')
 
     # Write generated testbench
-    tb_code = build_testbench(floors, emergency_at=50 if emergency else None)
+    tb_code = build_testbench(
+        floors,
+        start_floor=start_floor,
+        emergency_at=50 if emergency else None
+    )
     with open(tb_path, 'w') as f:
         f.write(tb_code)
 
@@ -194,6 +203,7 @@ def simulate():
     return jsonify({
         'success': True,
         'floors': floors,
+        'start_floor': start_floor,
         'testbench': tb_code,
         'verilog_output': run_result.stdout or '(no stdout)',
         'fsm_trace': fsm_trace,

@@ -324,6 +324,10 @@ main {
   display: flex; gap: 8px; margin-bottom: 16px;
 }
 
+.queue-actions .btn-run {
+  width: 100%;
+}
+
 /* ── Buttons ──────────────────────────────────────────────────── */
 .btn {
   font-family: var(--ui); font-weight: 700; font-size: 13px;
