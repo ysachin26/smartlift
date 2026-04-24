@@ -1,0 +1,224 @@
+$date
+	Fri Apr 24 09:18:19 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module SmartLift_Tb $end
+$var wire 8 ! requests [7:0] $end
+$var wire 3 " min_request [2:0] $end
+$var wire 3 # max_request [2:0] $end
+$var wire 2 $ idle [1:0] $end
+$var wire 2 % door [1:0] $end
+$var wire 3 & current_floor [2:0] $end
+$var wire 2 ' Up [1:0] $end
+$var wire 2 ( Down [1:0] $end
+$var reg 1 ) clk $end
+$var reg 1 * emergency_stop $end
+$var reg 3 + req_floor [2:0] $end
+$var reg 1 , reset $end
+$scope module dut $end
+$var wire 1 ) clk $end
+$var wire 1 * emergency_stop $end
+$var wire 3 - req_floor [2:0] $end
+$var wire 1 , reset $end
+$var parameter 3 . S_DOOR $end
+$var parameter 3 / S_EMERG $end
+$var parameter 3 0 S_IDLE $end
+$var parameter 3 1 S_MOVE_DN $end
+$var parameter 3 2 S_MOVE_UP $end
+$var parameter 3 3 S_RESET $end
+$var reg 2 4 Down [1:0] $end
+$var reg 2 5 Up [1:0] $end
+$var reg 3 6 current_floor [2:0] $end
+$var reg 2 7 door [1:0] $end
+$var reg 2 8 idle [1:0] $end
+$var reg 3 9 max_request [2:0] $end
+$var reg 3 : min_request [2:0] $end
+$var reg 8 ; requests [7:0] $end
+$var reg 3 < state [2:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b0 3
+b10 2
+b11 1
+b1 0
+b101 /
+b100 .
+$end
+#0
+$dumpvars
+b0 <
+b0 ;
+b111 :
+b0 9
+b1 8
+b0 7
+b0 6
+b1 5
+b0 4
+b0 -
+1,
+b0 +
+0*
+0)
+b0 (
+b1 '
+b0 &
+b0 %
+b1 $
+b0 #
+b111 "
+b0 !
+$end
+#5000
+1)
+#10000
+0)
+0,
+#15000
+b1 <
+1)
+b11 +
+b11 -
+#20000
+0)
+#25000
+b0 $
+b0 8
+b10 <
+1)
+#30000
+0)
+#35000
+b1 &
+b1 6
+1)
+#40000
+0)
+#45000
+b10 &
+b10 6
+1)
+#50000
+0)
+#55000
+b11 &
+b11 6
+1)
+#60000
+0)
+#65000
+b1 $
+b1 8
+b0 '
+b0 5
+b1 %
+b1 7
+b100 <
+1)
+#70000
+0)
+#75000
+b1 <
+b0 %
+b0 7
+1)
+#80000
+0)
+#85000
+b1 %
+b1 7
+b100 <
+1)
+#90000
+0)
+#95000
+b1 <
+b0 %
+b0 7
+1)
+#100000
+0)
+b1 +
+b1 -
+#105000
+b1 (
+b1 4
+b0 $
+b0 8
+b11 <
+1)
+#110000
+0)
+#115000
+b10 &
+b10 6
+1)
+#120000
+0)
+#125000
+b1 &
+b1 6
+1)
+#130000
+0)
+#135000
+b1 $
+b1 8
+b0 (
+b0 4
+b1 %
+b1 7
+b100 <
+1)
+#140000
+0)
+#145000
+b1 <
+b0 %
+b0 7
+1)
+#150000
+0)
+#155000
+b1 %
+b1 7
+b100 <
+1)
+#160000
+0)
+#165000
+b1 <
+b0 %
+b0 7
+1)
+#170000
+0)
+#175000
+b1 %
+b1 7
+b100 <
+1)
+#180000
+0)
+#185000
+b1 <
+b0 %
+b0 7
+1)
+#190000
+0)
+#195000
+b1 %
+b1 7
+b100 <
+1)
+#200000
+0)
