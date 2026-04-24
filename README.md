@@ -74,11 +74,3 @@ smartlift/
 | MOVING_DOWN | Travelling to lower floor |
 | DOOR_OPEN | Arrived — door open |
 | EMERGENCY | Emergency stop active |
-
----
-
-## Viva Tips
-- Show the live animated demo first, then open GTKWave to show the VCD waveform
-- Explain the FSM state transitions on the dashboard
-- Point out the auto-generated testbench code shown in the UI
-- The signals panel shows exact Verilog wire values in binary
