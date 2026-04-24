@@ -178,10 +178,11 @@ def simulate():
     # Build FSM state trace from snapshots
     fsm_trace = []
     for s in snapshots:
-        if s['idle']:
-            state = 'IDLE'
-        elif s['door']:
+        # Door-open should take priority over idle for UI state playback.
+        if s['door']:
             state = 'DOOR_OPEN'
+        elif s['idle']:
+            state = 'IDLE'
         elif s['up']:
             state = 'MOVING_UP'
         elif s['down']:

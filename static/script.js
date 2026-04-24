@@ -31,6 +31,7 @@ const resumeBtn = document.getElementById('resume-btn');
 const simOverlay = document.getElementById('sim-overlay');
 const simSub = document.getElementById('sim-sub');
 const tbCode = document.getElementById('tb-code');
+const toggleInfoBtn = document.getElementById('toggle-info-btn');
 
 // ─── Build building floors ────────────────────────────────────────────────────
 function buildUI() {
@@ -136,6 +137,24 @@ function planServiceOrder(requestedFloors, startFloor, startDir = 'UP') {
   return [...above, ...below];
 }
 
+function applyDiagnosticsVisibility(showPanel) {
+  document.body.classList.toggle('compact-mode', !showPanel);
+  if (toggleInfoBtn) {
+    toggleInfoBtn.textContent = showPanel ? 'Hide Diagnostics' : 'Show Diagnostics';
+  }
+}
+
+function toggleDiagnosticsPanel() {
+  const isCompact = document.body.classList.contains('compact-mode');
+  const showPanel = isCompact;
+  applyDiagnosticsVisibility(showPanel);
+  try {
+    localStorage.setItem('smartlift.showDiagnostics', showPanel ? '1' : '0');
+  } catch (_) {
+    // Ignore storage errors in restricted browser contexts.
+  }
+}
+
 // ─── Simulation ───────────────────────────────────────────────────────────────
 async function runSimulation() {
   if (simRunning || !queue.length) {
@@ -175,8 +194,8 @@ async function runSimulation() {
     addLog('✔ vvp simulation complete', 'log-done');
     if (data.vcd_available) addLog('✔ waveform.vcd generated', 'log-done');
 
-    // Show generated testbench
-    tbCode.textContent = data.testbench;
+    // Show generated testbench when panel is present
+    if (tbCode) tbCode.textContent = data.testbench;
 
     // Animate the FSM trace
     simOverlay.classList.add('hidden');
@@ -201,6 +220,7 @@ async function playTrace(trace, floors) {
   }
 
   addLog(`► Playing ${trace.length} FSM trace steps`, 'log-sys');
+  closeDoor();
 
   let prevFloor = -1;
   let prevState = '';
@@ -208,6 +228,7 @@ async function playTrace(trace, floors) {
   for (const snap of trace) {
     if (emergency) {
       setFSM('EMERG');
+      closeDoor();
       addLog('⚠ EMERGENCY STOP — simulation halted', 'log-emerg');
       break;
     }
@@ -223,6 +244,13 @@ async function playTrace(trace, floors) {
 
     // Update FSM badge
     if (state !== prevState) {
+      if (state === 'DOOR_OPEN') {
+        openDoor();
+        setDirection('IDLE');
+      }
+      if (prevState === 'DOOR_OPEN' && state !== 'DOOR_OPEN') {
+        closeDoor();
+      }
       setFSM(state);
       prevState = state;
       logState(f, state);
@@ -242,6 +270,7 @@ async function playTrace(trace, floors) {
   }
 
   addLog('━━━ Simulation Complete ━━━', 'log-done');
+  closeDoor();
   setDirection('IDLE');
   setFSM('IDLE');
 }
@@ -418,4 +447,10 @@ buildUI();
 setFSM('RESET');
 setDirection('IDLE');
 positionCabin(0, false);
+try {
+  const pref = localStorage.getItem('smartlift.showDiagnostics');
+  applyDiagnosticsVisibility(pref === '1');
+} catch (_) {
+  applyDiagnosticsVisibility(false);
+}
 addLog('► SmartLift FPGA demo loaded. Select floors and click Run Simulation.', 'log-done');

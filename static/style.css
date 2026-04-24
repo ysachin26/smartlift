@@ -640,3 +640,386 @@ main {
     display: none;
   }
 }
+
+/* Premium Cleanup Theme */
+:root {
+  --bg: #f3f5f9;
+  --bg2: #ffffff;
+  --bg3: #f7f9fc;
+  --panel: #ffffff;
+  --border: #d7dfeb;
+  --border2: #c3cfdf;
+  --amber: #0f4aa3;
+  --amber-dim: #2b4d7f;
+  --cyan: #0f4aa3;
+  --cyan-dim: #3f5f92;
+  --green: #1d8f59;
+  --red: #c43d3d;
+  --text: #162133;
+  --text-dim: #5e6c84;
+  --mono: 'IBM Plex Mono', monospace;
+  --ui: 'Sora', sans-serif;
+  --display: 'Sora', sans-serif;
+  --shadow: 0 12px 28px rgba(17, 28, 45, 0.08);
+  --glow-a: 0 0 0 transparent;
+  --glow-c: 0 0 0 transparent;
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(15, 74, 163, 0.06), transparent 28%),
+    radial-gradient(circle at 90% 100%, rgba(29, 143, 89, 0.05), transparent 34%),
+    linear-gradient(180deg, #eef2f8 0%, #f7f9fc 100%);
+  color: var(--text);
+}
+
+body::before {
+  display: none;
+}
+
+header {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  gap: 0;
+}
+
+.logo-title {
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #101a2d;
+}
+
+.logo-title b {
+  color: #0f4aa3;
+}
+
+.logo-sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.3px;
+}
+
+.header-badges {
+  gap: 10px;
+}
+
+.badge,
+.badge-green {
+  border-radius: 999px;
+  border: 1px solid #b8c8df;
+  background: #edf3ff;
+  color: #234d8d;
+  font-size: 10px;
+  padding: 6px 12px;
+  letter-spacing: 0.8px;
+  clip-path: none;
+}
+
+.badge-green {
+  background: #eaf8ef;
+  border-color: #b8e2ca;
+  color: #1d8f59;
+}
+
+main {
+  grid-template-columns: 260px 1fr 340px;
+  gap: 16px;
+  padding: 16px;
+  min-height: calc(100vh - 65px);
+}
+
+.building-panel,
+.control-panel,
+.info-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  clip-path: none;
+}
+
+.panel-title {
+  color: #6a7b96;
+  border-bottom: 1px solid #e4eaf4;
+  letter-spacing: 1.8px;
+}
+
+.floor-row {
+  border-bottom: 1px solid #ebf0f7;
+}
+
+.floor-row.active-floor {
+  background: linear-gradient(90deg, rgba(15, 74, 163, 0.08), rgba(15, 74, 163, 0.02));
+}
+
+.floor-row.lit .floor-lamp {
+  background: #0f4aa3;
+  box-shadow: 0 0 0 5px rgba(15, 74, 163, 0.12);
+}
+
+.shaft-bg {
+  background: linear-gradient(90deg, #f0f4fa, #dfe8f5, #f0f4fa);
+  border-left: 1px solid #cdd7e8;
+  border-right: 1px solid #cdd7e8;
+}
+
+#elevator-cabin {
+  background: linear-gradient(165deg, #1d3963, #102848);
+  border: 1px solid #1d4d87;
+  box-shadow: 0 8px 18px rgba(11, 35, 68, 0.32);
+}
+
+#elevator-cabin::before {
+  color: #edf4ff;
+}
+
+.floor-display,
+.door-status,
+.queue-display,
+.vcd-section,
+.gtkwave-hint,
+.log-box,
+.signals-grid .sig,
+.tb-box {
+  background: #f8faff;
+  border-color: #d9e1ee;
+}
+
+.floor-num {
+  color: #0f4aa3;
+  text-shadow: none;
+}
+
+.dir-idle #dir-arrow,
+.dir-up #dir-arrow,
+.dir-down #dir-arrow {
+  color: #0f4aa3;
+}
+
+.floor-btn {
+  background: #ffffff;
+  border: 1px solid #cfdae9;
+  color: #1f2f47;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.floor-btn:hover {
+  border-color: #0f4aa3;
+  box-shadow: 0 6px 14px rgba(15, 74, 163, 0.16);
+  color: #0f4aa3;
+  transform: translateY(-1px);
+}
+
+.floor-btn.queued {
+  border-color: #0f4aa3;
+  background: #eaf1ff;
+  color: #0f4aa3;
+  box-shadow: none;
+}
+
+.floor-btn.visited {
+  border-color: #8cd3ae;
+  background: #e9f8ef;
+  color: #1d8f59;
+}
+
+.btn {
+  border-radius: 10px;
+  letter-spacing: 0.2px;
+}
+
+.btn-clear {
+  background: #ffffff;
+  border-color: #cfdae9;
+  color: #52637d;
+}
+
+.btn-clear:hover {
+  border-color: #0f4aa3;
+  color: #0f4aa3;
+}
+
+.btn-run {
+  background: #0f4aa3;
+  border-color: #0f4aa3;
+  color: #ffffff;
+}
+
+.btn-run:hover {
+  background: #0d418f;
+  box-shadow: 0 8px 18px rgba(15, 74, 163, 0.25);
+}
+
+.btn-emerg {
+  background: #fff1f1;
+  border-color: #ebb8b8;
+  color: #b52c2c;
+  font-family: var(--ui);
+  letter-spacing: 0.3px;
+}
+
+.btn-emerg:hover {
+  background: #ffe4e4;
+  box-shadow: none;
+}
+
+.btn-emerg.active {
+  background: #c43d3d;
+  border-color: #c43d3d;
+}
+
+.btn-resume {
+  background: #edf3ff;
+  border-color: #c1d0e7;
+  color: #234d8d;
+}
+
+.fsm-state {
+  border-radius: 999px;
+  border-color: #ced9e8;
+  color: #5f7190;
+  padding: 6px 12px;
+}
+
+.fsm-state.active {
+  border-color: #0f4aa3;
+  color: #0f4aa3;
+  background: #eaf1ff;
+  box-shadow: none;
+}
+
+.fsm-state#fsm-EMERG.active {
+  border-color: #c43d3d;
+  color: #c43d3d;
+  background: #fff1f1;
+  box-shadow: none;
+}
+
+.log-box {
+  height: 220px;
+}
+
+.log-entry {
+  border-left: 2px solid transparent;
+  padding-left: 8px;
+}
+
+.log-up {
+  color: #1d8f59;
+  border-left-color: #1d8f59;
+}
+
+.log-down {
+  color: #936224;
+  border-left-color: #d69f5d;
+}
+
+.log-door {
+  color: #234d8d;
+  border-left-color: #234d8d;
+}
+
+.log-emerg {
+  color: #c43d3d;
+  border-left-color: #c43d3d;
+}
+
+.log-done {
+  color: #2959a1;
+  border-left-color: #2959a1;
+}
+
+.sig-name {
+  color: #637793;
+}
+
+.sig-val {
+  color: #183766;
+}
+
+.sim-overlay {
+  background: rgba(16, 24, 38, 0.34);
+  backdrop-filter: blur(3px);
+}
+
+.sim-modal {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.sim-label {
+  color: #0f4aa3;
+  letter-spacing: 0.6px;
+}
+
+.sim-sub {
+  color: #6b7f9b;
+}
+
+.building-panel,
+.control-panel,
+.info-panel {
+  animation: rise-in 380ms ease-out both;
+}
+
+.control-panel {
+  animation-delay: 70ms;
+}
+
+.info-panel {
+  animation-delay: 120ms;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  main {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .building-panel,
+  .control-panel,
+  .info-panel {
+    border-radius: 12px;
+  }
+}
+
+.header-toggle {
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #ffffff;
+  border-color: #cfdae9;
+  color: #3f5576;
+}
+
+.header-toggle:hover {
+  border-color: #0f4aa3;
+  color: #0f4aa3;
+  box-shadow: none;
+}
+
+body.compact-mode main {
+  grid-template-columns: 260px 1fr;
+}
+
+body.compact-mode .info-panel {
+  display: none;
+}
