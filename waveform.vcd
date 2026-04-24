@@ -1,5 +1,5 @@
 $date
-	Fri Apr 24 09:31:10 2026
+	Fri Apr 24 09:36:50 2026
 $end
 $version
 	Icarus Verilog
@@ -25,58 +25,66 @@ $var wire 1 ) clk $end
 $var wire 1 * emergency_stop $end
 $var wire 3 - req_floor [2:0] $end
 $var wire 1 , reset $end
-$var parameter 3 . S_DOOR $end
-$var parameter 3 / S_EMERG $end
-$var parameter 3 0 S_IDLE $end
-$var parameter 3 1 S_MOVE_DN $end
-$var parameter 3 2 S_MOVE_UP $end
-$var parameter 3 3 S_RESET $end
-$var reg 2 4 Down [1:0] $end
-$var reg 2 5 Up [1:0] $end
-$var reg 3 6 current_floor [2:0] $end
-$var reg 1 7 direction_up $end
-$var reg 2 8 door [1:0] $end
-$var reg 2 9 idle [1:0] $end
-$var reg 3 : last_req_floor [2:0] $end
-$var reg 3 ; max_request [2:0] $end
-$var reg 3 < min_request [2:0] $end
-$var reg 8 = requests [7:0] $end
-$var reg 1 > sampled_req $end
-$var reg 3 ? state [2:0] $end
+$var parameter 3 . DOOR_TICKS $end
+$var parameter 3 / MOVE_TICKS $end
+$var parameter 3 0 S_DOOR $end
+$var parameter 3 1 S_EMERG $end
+$var parameter 3 2 S_IDLE $end
+$var parameter 3 3 S_MOVE_DN $end
+$var parameter 3 4 S_MOVE_UP $end
+$var parameter 3 5 S_RESET $end
+$var reg 2 6 Down [1:0] $end
+$var reg 2 7 Up [1:0] $end
+$var reg 3 8 current_floor [2:0] $end
+$var reg 1 9 direction_up $end
+$var reg 2 : door [1:0] $end
+$var reg 3 ; door_wait [2:0] $end
+$var reg 2 < idle [1:0] $end
+$var reg 3 = last_req_floor [2:0] $end
+$var reg 3 > max_request [2:0] $end
+$var reg 3 ? min_request [2:0] $end
+$var reg 3 @ move_wait [2:0] $end
+$var reg 8 A requests [7:0] $end
+$var reg 1 B sampled_req $end
+$var reg 3 C state [2:0] $end
 $scope function has_above $end
-$var reg 3 @ f [2:0] $end
+$var reg 3 D f [2:0] $end
 $upscope $end
 $scope function has_below $end
-$var reg 3 A f [2:0] $end
+$var reg 3 E f [2:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b0 3
-b10 2
-b11 1
-b1 0
-b101 /
-b100 .
+b0 5
+b10 4
+b11 3
+b1 2
+b101 1
+b100 0
+b10 /
+b11 .
 $end
 #0
 $dumpvars
-bx A
-bx @
-b0 ?
-0>
+bx E
+bx D
+b0 C
+0B
+b0 A
+b0 @
+b111 ?
+b0 >
 b0 =
-b111 <
+b1 <
 b0 ;
 b0 :
-b1 9
+19
 b0 8
-17
+b1 7
 b0 6
-b1 5
-b0 4
 b0 -
 1,
 b0 +
@@ -97,173 +105,193 @@ $end
 0)
 0,
 #15000
-b1 ?
+b1 C
 b0 "
-b0 <
-1>
+b0 ?
+1B
 1)
 #20000
 0)
-b1 +
-b1 -
+b111 +
+b111 -
 #25000
 b0 '
-b0 5
-b1 :
-b10 !
-b10 =
-b0 A
-b0 @
+b0 7
+b111 =
+b10000000 !
+b10000000 A
+b0 E
+b0 D
 1)
 #30000
 0)
-b110 +
-b110 -
+b1 +
+b1 -
 #35000
 b1 '
-b1 5
+b1 7
 b0 $
-b0 9
-b10 ?
-b1 "
-b1 <
-b1 #
-b1 ;
-b110 :
-b1000010 !
-b1000010 =
+b0 <
+b10 C
+b111 "
+b111 ?
+b111 #
+b111 >
+b1 =
+b10000010 !
+b10000010 A
 1)
 #40000
 0)
 #45000
-b1 $
-b1 9
-b0 '
-b0 5
-b1 %
-b1 8
-b100 ?
-b1000000 !
-b1000000 =
-b1 &
-b1 6
-b110 #
-b110 ;
+b1 @
+b1 "
+b1 ?
 1)
 #50000
 0)
 #55000
-b1 ?
-b0 %
-b0 8
-b110 "
-b110 <
+b1 $
+b1 <
+b0 '
+b0 7
+b1 %
+b1 :
+b100 C
+b10000000 !
+b10000000 A
+b1 &
+b1 8
+b0 @
 1)
 #60000
 0)
 #65000
-b1 '
-b1 5
-b0 $
-b0 9
-b10 ?
-b1 @
+b1 ;
+b111 "
+b111 ?
 1)
 #70000
 0)
 #75000
-b10 &
-b10 6
+b10 ;
 1)
 #80000
 0)
 #85000
-b11 &
-b11 6
+b1 C
+b0 %
+b0 :
+b0 ;
 1)
 #90000
 0)
 #95000
-b100 &
-b100 6
+b1 '
+b1 7
+b0 $
+b0 <
+b10 C
+b1 D
 1)
 #100000
 0)
 #105000
-b101 &
-b101 6
+b1 @
 1)
 #110000
 0)
 #115000
-b1 $
-b1 9
-b0 '
-b0 5
-b1 %
-b1 8
-b100 ?
-b0 !
-b0 =
-b110 &
-b110 6
+b10 &
+b10 8
+b0 @
 1)
 #120000
 0)
 #125000
-b1 ?
-b0 %
-b0 8
+b1 @
 1)
 #130000
 0)
 #135000
-b110 A
-b110 @
+b11 &
+b11 8
+b0 @
 1)
 #140000
 0)
 #145000
+b1 @
 1)
 #150000
 0)
 #155000
+b100 &
+b100 8
+b0 @
 1)
 #160000
 0)
 #165000
+b1 @
 1)
 #170000
 0)
 #175000
+b101 &
+b101 8
+b0 @
 1)
 #180000
 0)
 #185000
+b1 @
 1)
 #190000
 0)
 #195000
+b110 &
+b110 8
+b0 @
 1)
 #200000
 0)
 #205000
+b1 @
 1)
 #210000
 0)
 #215000
+b1 $
+b1 <
+b0 '
+b0 7
+b1 %
+b1 :
+b100 C
+b0 !
+b0 A
+b111 &
+b111 8
+b0 @
 1)
 #220000
 0)
 #225000
+b1 ;
 1)
 #230000
 0)
 #235000
+b10 ;
 1)
 #240000
 0)
 #245000
+b1 C
+b0 %
+b0 :
+b0 ;
 1)
 #250000
 0)

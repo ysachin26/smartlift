@@ -18,8 +18,8 @@ module SmartLift_Tb();
     $dumpfile("waveform.vcd");
     $dumpvars(0, SmartLift_Tb);
     #10 reset = 0;
+    #10 req_floor = 7; // Button press for floor 7
     #10 req_floor = 1; // Button press for floor 1
-    #10 req_floor = 6; // Button press for floor 6
     #200 ; // Let controller serve all pending requests
     #20 $finish;
   end

@@ -11,6 +11,7 @@ let emergency = false;    // emergency stop flag
 let simRunning = false;    // prevent double-runs
 let currentFloor = 0;       // visual current floor
 let animTimer = null;     // animation interval handle
+let travelDirection = 'UP'; // remembers last movement direction
 const FLOOR_H = 44;       // px per floor row (matches CSS)
 
 // ─── DOM refs ────────────────────────────────────────────────────────────────
@@ -249,7 +250,7 @@ async function playTrace(trace, floors) {
 async function animateFromQueue(floors) {
   setFSM('IDLE');
 
-  const targets = planServiceOrder(floors, currentFloor, 'UP');
+  const targets = planServiceOrder(floors, currentFloor, travelDirection);
 
   for (let i = 0; i < targets.length; i++) {
     if (emergency) { setFSM('EMERG'); break; }
@@ -322,8 +323,8 @@ function moveCabinTo(floor) {
 
 function setDirection(dir) {
   dirIndicator.className = 'dir-indicator';
-  if (dir === 'UP') { dirIndicator.classList.add('dir-up'); dirArrow.textContent = '▲'; dirText.textContent = 'MOVING UP'; }
-  if (dir === 'DOWN') { dirIndicator.classList.add('dir-down'); dirArrow.textContent = '▼'; dirText.textContent = 'MOVING DOWN'; }
+  if (dir === 'UP') { dirIndicator.classList.add('dir-up'); dirArrow.textContent = '▲'; dirText.textContent = 'MOVING UP'; travelDirection = 'UP'; }
+  if (dir === 'DOWN') { dirIndicator.classList.add('dir-down'); dirArrow.textContent = '▼'; dirText.textContent = 'MOVING DOWN'; travelDirection = 'DOWN'; }
   if (dir === 'IDLE') { dirIndicator.classList.add('dir-idle'); dirArrow.textContent = '●'; dirText.textContent = 'IDLE'; }
 }
 

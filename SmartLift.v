@@ -31,6 +31,11 @@ reg [2:0] state;
 reg       direction_up;
 reg       sampled_req;
 reg [2:0] last_req_floor;
+reg [2:0] move_wait;
+reg [2:0] door_wait;
+
+localparam [2:0] MOVE_TICKS = 3'd2; // cycles per floor movement
+localparam [2:0] DOOR_TICKS = 3'd3; // cycles to hold door open
 
 // Returns 1 if any pending request exists above floor f.
 function has_above;
@@ -80,6 +85,8 @@ always @(posedge clk or posedge reset) begin
         direction_up  <= 1'b1;
         sampled_req   <= 1'b0;
         last_req_floor<= 3'd0;
+        move_wait     <= 3'd0;
+        door_wait     <= 3'd0;
     end
     else if (emergency_stop) begin
         state  <= S_EMERG;
@@ -172,6 +179,7 @@ always @(posedge clk or posedge reset) begin
                     idle  <= 2'd1;
                     Up    <= 2'd0;
                     Down  <= 2'd0;
+                    door_wait <= 3'd0;
                 end
                 else if (direction_up && has_above(current_floor)) begin
                     state <= S_MOVE_UP;
@@ -179,6 +187,7 @@ always @(posedge clk or posedge reset) begin
                     door  <= 2'd0;
                     Up    <= 2'd1;
                     Down  <= 2'd0;
+                    move_wait <= 3'd0;
                 end
                 else if (direction_up && has_below(current_floor)) begin
                     direction_up <= 1'b0;
@@ -187,6 +196,7 @@ always @(posedge clk or posedge reset) begin
                     door  <= 2'd0;
                     Up    <= 2'd0;
                     Down  <= 2'd1;
+                    move_wait <= 3'd0;
                 end
                 else if (!direction_up && has_below(current_floor)) begin
                     state <= S_MOVE_DN;
@@ -194,6 +204,7 @@ always @(posedge clk or posedge reset) begin
                     door  <= 2'd0;
                     Up    <= 2'd0;
                     Down  <= 2'd1;
+                    move_wait <= 3'd0;
                 end
                 else if (!direction_up && has_above(current_floor)) begin
                     direction_up <= 1'b1;
@@ -202,6 +213,7 @@ always @(posedge clk or posedge reset) begin
                     door  <= 2'd0;
                     Up    <= 2'd1;
                     Down  <= 2'd0;
+                    move_wait <= 3'd0;
                 end
                 else begin
                     // No pending requests.
@@ -214,57 +226,78 @@ always @(posedge clk or posedge reset) begin
             end
 
             S_MOVE_UP: begin
-                if (current_floor < 3'd7) begin
-                    current_floor <= current_floor + 1;
-                    if (requests[current_floor + 1]) begin
-                        requests[current_floor + 1] <= 1'b0;
-                        state <= S_DOOR;
-                        door  <= 2'd1;
+                if (move_wait < (MOVE_TICKS - 1'b1)) begin
+                    move_wait <= move_wait + 1'b1;
+                end
+                else begin
+                    move_wait <= 3'd0;
+                    if (current_floor < 3'd7) begin
+                        current_floor <= current_floor + 1'b1;
+                        if (requests[current_floor + 1'b1]) begin
+                            requests[current_floor + 1'b1] <= 1'b0;
+                            state <= S_DOOR;
+                            door  <= 2'd1;
+                            Up    <= 2'd0;
+                            idle  <= 2'd1;
+                            door_wait <= 3'd0;
+                        end
+                    end
+                    else if (has_below(current_floor)) begin
+                        direction_up <= 1'b0;
+                        state <= S_MOVE_DN;
+                        Up    <= 2'd0;
+                        Down  <= 2'd1;
+                    end
+                    else begin
+                        state <= S_IDLE;
                         Up    <= 2'd0;
                         idle  <= 2'd1;
                     end
                 end
-                else if (has_below(current_floor)) begin
-                    direction_up <= 1'b0;
-                    state <= S_MOVE_DN;
-                    Up    <= 2'd0;
-                    Down  <= 2'd1;
-                end
-                else begin
-                    state <= S_IDLE;
-                    Up    <= 2'd0;
-                    idle  <= 2'd1;
-                end
             end
 
             S_MOVE_DN: begin
-                if (current_floor > 3'd0) begin
-                    current_floor <= current_floor - 1;
-                    if (requests[current_floor - 1]) begin
-                        requests[current_floor - 1] <= 1'b0;
-                        state <= S_DOOR;
-                        door  <= 2'd1;
+                if (move_wait < (MOVE_TICKS - 1'b1)) begin
+                    move_wait <= move_wait + 1'b1;
+                end
+                else begin
+                    move_wait <= 3'd0;
+                    if (current_floor > 3'd0) begin
+                        current_floor <= current_floor - 1'b1;
+                        if (requests[current_floor - 1'b1]) begin
+                            requests[current_floor - 1'b1] <= 1'b0;
+                            state <= S_DOOR;
+                            door  <= 2'd1;
+                            Down  <= 2'd0;
+                            idle  <= 2'd1;
+                            door_wait <= 3'd0;
+                        end
+                    end
+                    else if (has_above(current_floor)) begin
+                        direction_up <= 1'b1;
+                        state <= S_MOVE_UP;
+                        Up    <= 2'd1;
+                        Down  <= 2'd0;
+                    end
+                    else begin
+                        state <= S_IDLE;
                         Down  <= 2'd0;
                         idle  <= 2'd1;
                     end
                 end
-                else if (has_above(current_floor)) begin
-                    direction_up <= 1'b1;
-                    state <= S_MOVE_UP;
-                    Up    <= 2'd1;
-                    Down  <= 2'd0;
-                end
-                else begin
-                    state <= S_IDLE;
-                    Down  <= 2'd0;
-                    idle  <= 2'd1;
-                end
             end
 
             S_DOOR: begin
-                // Door open — go back to IDLE for next request
-                door  <= 2'd0;
-                state <= S_IDLE;
+                // Hold door open for a few cycles to mimic dwell time.
+                door <= 2'd1;
+                if (door_wait < (DOOR_TICKS - 1'b1)) begin
+                    door_wait <= door_wait + 1'b1;
+                end
+                else begin
+                    door_wait <= 3'd0;
+                    door  <= 2'd0;
+                    state <= S_IDLE;
+                end
             end
 
             S_EMERG: begin
